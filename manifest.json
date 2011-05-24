@@ -1,0 +1,19 @@
+{
+  "name": "Couchappy",
+  "version": "1.0.0",
+  "description": "Allows you to install couchapps super easily!",
+  "permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "icons": {
+    "48" : "couch-48.png",
+    "128" : "couch-128.png"
+  },
+  "browser_action": {
+    "default_icon": "couch-19.png",
+    "default_title": "Couchappy",
+    "default_popup": "popup.html"
+  },
+  "background_page" : "background.html"
+}

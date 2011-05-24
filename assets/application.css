@@ -1,0 +1,162 @@
+body {
+  padding: 2em;
+  margin: 0;
+    margin-top: 50px;
+  background-color: #fcfcfc; }
+
+a {
+  color: #107fc9;
+  color: #3f8fba;
+  text-decoration: none; }
+  a:hover {
+    color: #3f8fba;
+    text-decoration: underline; }
+
+p {
+  word-wrap: break-word;
+  margin: 10px 0px 0px 0px; }
+
+h1, h2, h3, h4, h5 {
+  color: #444444;
+  position: relative;
+  font-weight: bold; }
+
+h4 {
+  margin-bottom: 5px; }
+
+ol, ul, li {
+  list-style: none; }
+
+form {
+  position: relative; }
+  form input,
+  form textarea,
+  form label {
+    font-size: auto; }
+
+.hidden {
+  display: none; }
+
+.avatar {
+  width: 50px;
+  height: 50px; }
+
+input:not([type='submit']),
+textarea {
+  font-family: "Arial", "Helvetica", sans-serif;
+  font-size: 14px;
+  padding: 0.3em;
+  display: block;
+  width: 66%;
+  border: 1px solid #cccccc;
+  height: auto;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px; }
+
+input[type='checkbox'] {
+  width: auto; }
+
+input[type='hidden'] {
+  display: none; }
+
+.submit_block {
+  text-align: right; }
+
+form p {
+  position: relative;
+  padding: 0;
+  margin: 0; }
+
+form p.checkbox_select {
+  width: 75%; }
+  form p.checkbox_select label {
+    left: 20px;
+    top: 3px; }
+  form p.checkbox_select img {
+    position: relative;
+    top: 6px; }
+
+label {
+  font-weight: normal;
+  color: #999999;
+  position: absolute;
+  top: 3px;
+  left: 0.48em;
+  text-shadow: 0 1px 1px #eeeeee; }
+
+footer {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 12px;
+  color: #999999; }
+  footer .container {
+    margin-top: 4em;
+    padding: 0;
+      padding-top: 0.5em;
+    border-top: 1px solid #dddddd; }
+  footer img {
+    position: relative;
+    top: 2px; }
+  footer ul#footer_nav {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    float: right; }
+    footer ul#footer_nav > li {
+      display: inline;
+      margin-right: 1em; }
+      footer ul#footer_nav > li:last-child {
+        margin: 0; }
+    footer ul#footer_nav a {
+      color: #777777; }
+
+#login {
+  width: 600px;
+  padding-bottom: 20px;
+  text-align: center;
+  display: inline-block; }
+  #login form input,
+  #login form label {
+    font-size: 21px;
+    display: inline; }
+  #login form label {
+    top: 13px;
+    text-shadow: 0 1px 1px #cccccc; }
+  #login form input[type='text'],
+  #login form input[type='password'] {
+    -webkit-box-shadow: 0 1px 0px white, 0 -1px 0px #888888;
+    -moz-box-shadow: 0 1px 0px white, 0 -1px 0px #888888;
+    box-shadow: 0 1px 0px white, 0 -1px 0px #888888;
+  }
+  #login form .short {
+    width: 180px;
+    max-width: 180px;
+  }
+  #login form .long {
+    width: 383px;
+    max-width: 383px;
+  }
+  #login .url_container {
+    width: 403px;
+    right: 1px;
+  }
+  #login form p {
+    display: inline-block;
+    position: relative;
+    width: 350px; }
+    #login form p:last-child {
+      margin-left: 3px; }
+      #login form p span.pod_location {
+        color: #888888; }
+      #login form p.submit {
+        top: 8px;
+      }
+      #login form p.submit a {
+        width: auto;
+        position: relative;
+        top: 0px;
+        display: block;
+        color: #666666;
+        margin-bottom: 10px; }

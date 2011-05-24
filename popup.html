@@ -1,0 +1,78 @@
+<link href="assets/style.css" rel="stylesheet" type="text/css" />
+<script src="assets/jquery.min.js" type="text/javascript"></script> 
+<script src="assets/jquery.infieldlabel.js" type="text/javascript"></script> 
+
+<div id='login'> 
+  <form accept-charset="UTF-8">
+    <div class="credentials">
+      <p> 
+        <label for="username">Username</label> 
+        <input id="username" class="short" size="30" type="text" /> 
+      </p>
+      <p> 
+        <label for="password">Password</label> 
+        <input id="password" class="short" size="30" type="password" /> 
+      </p> 
+    </div>
+    <p class="instructions">
+      URL of the CouchApp to replicate from <br />example: <strong>http://maxogden.com/blog</strong>
+    </p>
+    <p class="url_container"> 
+      <label for="remote">CouchApp URL</label> 
+      <input id="remote" class="long" size="40" type="text" /> 
+    </p>
+    <p class="instructions">
+      URL of the CouchDB to replicate to <br />example: http://localhost:5984
+    </p>
+    <p class="url_container"> 
+      <label for="local">Your Couch</label> 
+      <input id="local" class="long" size="40" type="text" /> 
+    </p> 
+    <p class='submit'> 
+      <a href="javascript:void(false)" class="large primary button"><span class="rightarrow icon"></span>Provision Server</a> 
+    </p> 
+  </form> 
+  <img alt="Ajax-loader" class="hidden" id="spinner" src="assets/ajax-loader.gif" /> 
+</div> 
+<div id='notification' style="color: #D0312B"></div> 
+<footer> 
+  <ul id='footer_nav'> 
+    <li><a href="http://twitter.com/maxogden">by @maxogden</a></li>
+  </ul> 
+</footer>
+
+<script type="text/javascript">
+  $("label").inFieldLabels();
+
+  var resting = "<span class='rightarrow icon'></span>Provision Server"
+    , loading = "<span class='loading icon'></span>Contacting your Couch..."
+
+  function provision() {
+    $('.button').html(loading);
+  
+    var data = {};
+    $(['username', 'password', 'url']).each(function(i, input) {
+      data[input] = $("#" + input).val();
+    })
+  
+    $.post("/provision", data, function(response) {
+      var msg;
+      if ("error" in response) msg = response.reason;
+      if ("doc_write_failures" in response) {
+        if (response.doc_write_failures > 0) {
+          msg = "Invalid username or password"
+        } else {
+          msg = 'Monocles installed successfully! View it <a href="http://' + data.url + '/monocles/_design/couchappspora/_rewrite' + '">here</a>'
+        }
+      }
+      $('.button').html(resting);
+      $('#notification').html(msg);
+    })
+  }
+
+  $("input").keydown(function(e) {
+     if(e.keyCode == 13) provision();
+  });
+
+  $('.button').click( provision );
+</script>
