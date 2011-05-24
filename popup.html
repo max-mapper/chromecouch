@@ -15,18 +15,18 @@
       </p> 
     </div>
     <p class="instructions">
-      URL of the CouchApp to replicate from <br />example: <strong>http://maxogden.com/blog</strong>
+      URL of the CouchApp to replicate from <br />example: <strong>http://maxogden.com/blog/_design/blog</strong>
     </p>
     <p class="url_container"> 
-      <label for="remote">CouchApp URL</label> 
-      <input id="remote" class="long" size="40" type="text" /> 
+      <label for="source">CouchApp URL</label> 
+      <input id="source" class="long" size="40" type="text" /> 
     </p>
     <p class="instructions">
-      URL of the CouchDB to replicate to <br />example: http://localhost:5984
+      URL of the CouchDB to replicate to <br />example: http://localhost:5984/blog
     </p>
     <p class="url_container"> 
-      <label for="local">Your Couch</label> 
-      <input id="local" class="long" size="40" type="text" /> 
+      <label for="target">Your Couch</label> 
+      <input id="target" class="long" size="40" type="text" /> 
     </p> 
     <p class='submit'> 
       <a href="javascript:void(false)" class="large primary button"><span class="rightarrow icon"></span>Provision Server</a> 
@@ -34,45 +34,78 @@
   </form> 
   <img alt="Ajax-loader" class="hidden" id="spinner" src="assets/ajax-loader.gif" /> 
 </div> 
-<div id='notification' style="color: #D0312B"></div> 
-<footer> 
-  <ul id='footer_nav'> 
-    <li><a href="http://twitter.com/maxogden">by @maxogden</a></li>
-  </ul> 
-</footer>
+<center><div id='notification' style="color: #D0312B"></div></center>
 
 <script type="text/javascript">
+  var data;
+
+  function request(action, options, callback) {    
+    chrome.extension.sendRequest({'action' : action, 'options': options}, callback);
+  }
+
   $("label").inFieldLabels();
 
   var resting = "<span class='rightarrow icon'></span>Provision Server"
     , loading = "<span class='loading icon'></span>Contacting your Couch..."
 
-  function provision() {
+  function replicate(source, target) {
     $('.button').html(loading);
-  
-    var data = {};
-    $(['username', 'password', 'url']).each(function(i, input) {
-      data[input] = $("#" + input).val();
-    })
-  
-    $.post("/provision", data, function(response) {
+    
+    var parsed = {
+      host: "http://" + source.split( "/" )[ 2 ],
+      db: source.split( '/' )[ 3 ],
+      design: unescape( source ).split( '/' )[ 5 ]
+    }
+ 
+    var replication = {"target":target, "source":parsed.host + "/" + parsed.db, "doc_ids":["_design/" + parsed.design]};
+
+    request("POST", {url: "http://" + target.split( "/" )[ 2 ] + "/_replicate", data: replication}, function(response) {
       var msg;
       if ("error" in response) msg = response.reason;
+      if ("statusText" in response && response.statusText === "error") msg = response.statusText;
+      
       if ("doc_write_failures" in response) {
         if (response.doc_write_failures > 0) {
           msg = "Invalid username or password"
         } else {
-          msg = 'Monocles installed successfully! View it <a href="http://' + data.url + '/monocles/_design/couchappspora/_rewrite' + '">here</a>'
+          msg = 'success!'
         }
+      } else {
+        msg = JSON.stringify(response);
       }
       $('.button').html(resting);
       $('#notification').html(msg);
     })
   }
+  
+  function postForm() {
+    data = {};
+    $(['source', 'target']).each(function(i, input) {
+      data[input] = $("#" + input).val();
+    })
+    replicate(data.source, data.target);
+  }
 
   $("input").keydown(function(e) {
-     if(e.keyCode == 13) provision();
+     if(e.keyCode == 13) postForm();
   });
 
-  $('.button').click( provision );
+  $('.button').click( postForm );
+
+  // 
+  // function createDb(db, couch, callback) {
+  //   request({method: "GET", uri:couch + "/" + db, headers:headers}, function(err, resp, body) {
+  //     var msg = parseResponse(err, resp, body);
+  //     if (msg.error && msg.reason === "no_db_file") {
+  //       request({method: "PUT", uri:couch + "/" + db, headers:headers}, function(err, resp, body) {
+  //          msg = parseResponse(err, resp, body);
+  //          callback(msg);
+  //        });
+  //     } else {
+  //       callback(msg);
+  //     }
+  //   });
+  // }
+  // 
+  
 </script>
