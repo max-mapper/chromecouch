@@ -1,6 +1,9 @@
 <link href="assets/style.css" rel="stylesheet" type="text/css" />
 <script src="assets/jquery.min.js" type="text/javascript"></script> 
 <script src="assets/jquery.infieldlabel.js" type="text/javascript"></script> 
+<script src="assets/jquery.couch2.js" type="text/javascript"></script> 
+<script src="assets/underscore.js" type="text/javascript"></script> 
+<script src="assets/couchdata.js" type="text/javascript"></script> 
 
 <div id='login'> 
   <form accept-charset="UTF-8">
@@ -39,8 +42,12 @@
 <script type="text/javascript">
   var data;
 
-  function request(action, options, callback) {    
-    chrome.extension.sendRequest({'action' : action, 'options': options}, callback);
+  function makeRequest(options) {
+    var dfd = new jQuery.Deferred();
+    chrome.extension.sendRequest({'options': options}, function(resp) {
+      resp.ok ? dfd.resolve(resp.data) : dfd.reject(resp.data);
+    });
+    return dfd.promise();
   }
 
   $("label").inFieldLabels();
@@ -48,6 +55,34 @@
   var resting = "<span class='rightarrow icon'></span>Provision Server"
     , loading = "<span class='loading icon'></span>Contacting your Couch..."
 
+  function parseCouchApp(url) {
+    return {
+      host: "http://" + url.split( "/" )[ 2 ],
+      db: url.split( '/' )[ 3 ],
+      design: unescape( url ).split( '/' )[ 5 ]
+    }
+  }
+  
+  function checkForCouch(host, callback) {
+    var opts = {url: host + ":5984"};
+    $.when( makeRequest(opts) ).then(function(response) {
+      response.couchdb ? callback(true) : callback(false);
+    }, function(fail) {console.log("fail!", fail)})
+  }
+  var currentPage;
+   
+  chrome.tabs.getSelected(null, function(tab) {
+    currentPage = parseCouchApp(tab.url);
+    checkForCouch(currentPage.host, function(exists) {
+      if(exists) {
+        var couchData = new CouchData(currentPage.host + ":5984");
+        couchData.loadDatabases().then(function (databases) {console.log(databases)});
+      } else {
+        console.log('doesnt exist!');
+      }
+    })
+  });
+  
   function replicate(source, target) {
     $('.button').html(loading);
     
@@ -59,7 +94,7 @@
  
     var replication = {"target":target, "source":parsed.host + "/" + parsed.db, "doc_ids":["_design/" + parsed.design]};
 
-    request("POST", {url: "http://" + target.split( "/" )[ 2 ] + "/_replicate", data: replication}, function(response) {
+    makeRequest({type: "POST", url: "http://" + target.split( "/" )[ 2 ] + "/_replicate", data: replication}).then(function(response) {
       var msg;
       if ("error" in response) msg = response.reason;
       if ("statusText" in response && response.statusText === "error") msg = response.statusText;

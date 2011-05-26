@@ -1,16 +1,17 @@
 <script src="assets/jquery.min.js"></script>
 <script>
-  function request(action, options, callback) {
-    $.ajax({
-      url: options.url,
-      data: JSON.stringify(options.data),
-      success: callback,
-      error: callback,
-      type: action,
+  function request(options, callback) {
+    var reqOpts = {
+      success: function(data){callback({data: data, ok: true})},
+      error: function(error){callback({data: error, ok: false})},
       dataType: "json",
       contentType: "application/json"
-    })
+    }
+    $.extend(reqOpts, options);
+    $.ajax(reqOpts);
   }
   
-  chrome.extension.onRequest.addListener(function(req, sender, callback) { request(req.action, req.options, callback) });
+  chrome.extension.onRequest.addListener(function(req, sender, callback) { 
+    request(req.options, callback);
+  });
 </script>

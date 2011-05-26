@@ -4,7 +4,8 @@
   "description": "Allows you to install couchapps super easily!",
   "permissions": [
     "http://*/*",
-    "https://*/*"
+    "https://*/*",
+    "tabs"
   ],
   "icons": {
     "48" : "couch-48.png",
@@ -15,5 +16,9 @@
     "default_title": "Couchappy",
     "default_popup": "popup.html"
   },
-  "background_page" : "background.html"
+  "background_page" : "background.html",
+  "content_scripts": [{
+      "matches": ["http://*/*"],
+      "js": ["content_script.js"]
+  }]
 }
