@@ -7,10 +7,6 @@
 <script src="assets/couchdata.js" type="text/javascript"></script> 
 <h1 class="title">Couch Replicator</h1>
 <div id='container'>
-  <div class="loading">
-    <img alt="Ajax-loader" id="spinner" src="assets/ajax-loader.gif" /> 
-    <span>Detecting couchapps on this website...</span>
-  </div>
 </div>
 <center><div id='notification' style="color: #D0312B"></div></center>
 
@@ -53,7 +49,7 @@
       response.couchdb ? callback(true) : callback(false);
     }, function(fail) {
       render('form', 'container');
-      render('sourceInstructions', 'sourceInstructions');
+      render('sourceInstructions', 'sourceInstructions', {data: {host: host}});
       render('sourceUrl', 'sourceContainer');
       render('target', 'targetContainer');
       render('submit', 'submitContainer');
@@ -64,36 +60,6 @@
       $('.button').click( postForm );
     })
   }
-  var currentPage;
-   
-  chrome.tabs.getSelected(null, function(tab) {
-    currentPage = parseCouchApp(tab.url);
-    checkForCouch(currentPage.host, function(exists) {
-      if(exists) {
-        var couchData = new CouchData(currentPage.host + ":5984");
-        couchData.loadDatabases().then(function (databases) {          
-          var list = [];
-          _.each(databases, function(ddocs, db) {
-            _.each(ddocs, function(ddoc) {
-              list.push({database: db, title: ddoc.id.split('_design/')[1]});
-            })
-          })
-          render('form', 'container');
-          render('dropdown', 'sourceContainer', {data: {options: list}});
-          render('target', 'targetContainer');
-          render('submit', 'submitContainer');
-          $("label", $('#targetContainer')).inFieldLabels();
-          $("input").keydown(function(e) {
-             if(e.keyCode == 13) postForm();
-          });
-          $('.button').click( postForm );
-        });
-      } else {
-        render('form', 'container');
-        $('#notification').append("no exist");
-      }
-    })
-  });
   
   function replicate(source, target) {
     $('.button').html(loading);
@@ -132,7 +98,38 @@
     })
     replicate(data.source, data.target);
   }
+  
+  var currentPage;
 
+  chrome.tabs.getSelected(null, function(tab) {
+    currentPage = parseCouchApp(tab.url);
+    render('loading', 'container', {data: {host: currentPage.host}});
+    checkForCouch(currentPage.host, function(exists) {
+      if(exists) {
+        var couchData = new CouchData(currentPage.host + ":5984");
+        couchData.loadDatabases().then(function (databases) {          
+          var list = [];
+          _.each(databases, function(ddocs, db) {
+            _.each(ddocs, function(ddoc) {
+              list.push({database: db, title: ddoc.id.split('_design/')[1]});
+            })
+          })
+          render('form', 'container');
+          render('dropdown', 'sourceContainer', {data: {count: list.length, options: list}});
+          render('target', 'targetContainer');
+          render('submit', 'submitContainer');
+          $("label", $('#targetContainer')).inFieldLabels();
+          $("input").keydown(function(e) {
+             if(e.keyCode == 13) postForm();
+          });
+          $('.button').click( postForm );
+        });
+      } else {
+        render('form', 'container');
+        $('#notification').append("no exist");
+      }
+    })
+  });
 
   // function createDb(db, couch, callback) {
   //   request({method: "GET", uri:couch + "/" + db, headers:headers}, function(err, resp, body) {
@@ -152,13 +149,21 @@
 </script>
 
 <script id="dropdownTemplate" type="text/mustache">
+  <p class="exciting">Found <span class="veryExciting">{{count}}</span> couchapps!</p>
   <div class="dropdown_filter">
-    <span class='show_me'>Replicate from:</span>
+    <span class='instructions'>Pick one:</span>
     <select class='select'>
     {{#options}}
       <option value='{{title}}'>{{database}}/{{title}}</option>
     {{/options}}
     </select>      
+  </div>
+</script>
+
+<script id="loadingTemplate" type="text/mustache">
+  <div class="loading">
+    <img alt="Ajax-loader" id="spinner" src="assets/ajax-loader.gif" /> 
+    <span class="instructions">Detecting couchapps on {{host}}...</span>
   </div>
 </script>
 
@@ -173,24 +178,26 @@
 </script>
 
 <script id="sourceInstructionsTemplate" type="text/mustache">
-  <p class="noCouch">Could not find any couchapps on this website :(</p>
-  You can manually enter a couchapp url <br />example: <strong>http://maxogden.com/blog/_design/blog</strong>
+  <p class="exciting">No couchapps found on {{host}} <span class="veryExciting">:(</span></p>
+  <p class="smaller">You can still manually enter a couchapp url. <br /> e.g. <span class="somewhatExciting">http://maxogden.com/blog/_design/blog</span>
 </script>
 
 <script id="sourceUrlTemplate" type="text/mustache">
-  <label for="source">CouchApp URL</label>
+  <label for="source">http://CouchAppURL</label>
   <input id="source" class="long" size="40" type="text" />
 </script>
 
 <script id="targetTemplate" type="text/mustache">
   <p class="instructions">
-    Replicate to:
+    Replicate it to:
   </p>
   <p class="url_container">
-    <label for="target">Your Couch</label> 
+    <label for="target">http://YourCouch/SomeDatabase</label> 
     <input id="target" class="long" size="40" type="text" />
   </p>
-  <br />example destination: <strong>http://localhost:5984/blog</strong>
+  <p class="sub instructions">
+    example destination: <strong>http://localhost:5984/blog</strong>
+  </p>
 </script>
 
 <script id="submitTemplate" type="text/mustache"> 

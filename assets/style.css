@@ -1,6 +1,18 @@
 @font-face {
   font-family: "Museo 700";
   src: url('Museo700-Regular.otf') format("opentype"); }
+  
+@font-face {
+  font-family: "Ostrich";
+  src: url('ostrich-regular.ttf') format("truetype"); }
+
+@font-face {
+  font-family: "OstrichBlack";
+  src: url('ostrich-black.ttf') format("truetype"); }  
+
+@font-face {
+  font-family: "Line1 Sans Thin";
+  src: url('line1_sans-thin.ttf') format("truetype"); }
 
 /*RESET*/
 html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, dialog, figure, footer, header, hgroup, nav, section {margin:0;padding:0;border:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;}
@@ -157,6 +169,13 @@ a.button:hover span.icon.user { background-position: 0 -869px }
 /*END CSS3BUTTONS*/
 
 #spinner {position: relative; top: 1px; right: 4px;}
+.exciting {line-height: 30px; font-size: 30px; font-family: "Ostrich"; letter-spacing: 1px;}
+.veryExciting {font-size: 30px; font-family: "OstrichBlack"; letter-spacing: 1px;}
+.somewhatExciting {font-size: 20px; font-family: "Ostrich"; letter-spacing: 1px;}
+.dropdown_filter {margin: 10px 0 0 0;}
+.instructions {font-size: 15px; letter-spacing: 1px; font-family: "Line1 Sans Thin"}
+.smaller {margin: 10px 0 0 0; font-size: 12px}
+.sub {margin: 0 0 10px 0;font-size: 12px}
 .loading {font-size: 16px}
 body{height: 350px; background-color:#EBE9E8;margin:0px 0 0;padding:2em;}
 a{color:#3f8fba;text-decoration:none;}
@@ -166,7 +185,7 @@ h1,h2,h3,h4,h5{color:#444;position:relative;font-weight:700;}
 h4{margin-bottom:5px;}
 ol,ul,li{list-style:none;}
 form{position:relative;}
-form input,form textarea,form label{font-size:auto;}
+form input,form textarea,form label{font-size:auto; overflow: hidden}
 h1.title{-x-system-font:none;text-align:center;color:#161616;font-family:"Museo 700", Helvetica,Arial,sans-serif;font-size:34px;font-style:normal;font-variant:normal;font-weight:400;line-height:45px;text-shadow:1px 1px 0 #FDFDFD;position:relative;top:-7px;margin:0;}
 .avatar{width:50px;height:50px;}
 .credentials {display: none}
@@ -179,12 +198,11 @@ form p.checkbox_select{width:75%;}
 form p.checkbox_select label{left:20px;top:3px;}
 form p.checkbox_select img{position:relative;top:6px;}
 label{font-weight:400;color:#999;position:absolute;top:3px;left:0.48em;text-shadow:0 1px 1px #eee;}
-#sourceContainer {margin: 0px 0px 10px 0px}
-#targetContainer {margin: 10px 0}
+#sourceContainer {margin: 0px 0px 5px 0px}
 #container{width:400px;padding-bottom:20px;text-align:center;display:inline-block;}
 #container form input,#container form label{font-size:21px;display:inline;}
 #container form label{top:13px;text-shadow:0 1px 1px #ccc; margin: 0px 0px 0px 5px}
-#container form input[type='text'],#container form input[type='password']{-webkit-box-shadow:0 1px 0 white, 0 -1px 0 #888;-moz-box-shadow:0 1px 0 white, 0 -1px 0 #888;box-shadow:0 1px 0 white, 0 -1px 0 #888;}
+#container form input[type='text'],#container form input[type='password']{box-shadow:0px 3px 1px #5E5654, 0 0 0 #888;}
 #container form .short{width:180px;max-width:180px;}
 #container form .long{width:383px;max-width:383px;}
 #container .url_container{width:403px;right:1px;}
