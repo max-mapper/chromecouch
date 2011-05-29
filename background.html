@@ -5,7 +5,8 @@
       success: function(data){callback({data: data, ok: true})},
       error: function(error){callback({data: error, ok: false})},
       dataType: "json",
-      contentType: "application/json"
+      contentType: "application/json",
+      timeout: 5000
     }
     $.extend(reqOpts, options);
     $.ajax(reqOpts);

@@ -37,7 +37,8 @@
       designDocs: function(opts) {
         return makeRequest($.extend(defaults, {
           url: this.uri + "_all_docs",
-          data: {startkey:'"_design/"', endkey:'"_design0"', include_docs:true}
+          data: {startkey:'"_design/"', endkey:'"_design0"', include_docs:true},
+          timeout: 20000
         }));
       }
 

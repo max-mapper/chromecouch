@@ -132,9 +132,10 @@
     var currentPage;
     chrome.tabs.getSelected(null, function(tab) {
       currentPage = parseCouchApp(tab.url);
-      render('loading', 'container', {data: {host: currentPage.host}});
+      render('loading', 'container', {data: {message: "Detecting CouchDB on " + currentPage.host + "..."}});
       checkForCouch(currentPage.host, function(exists) {
         if(exists) {
+          render('loading', 'container', {data: {message: "Found CouchDB! Detecting couchapps on " + currentPage.host + "..."}});
           var couchData = new CouchData(currentPage.host + ":5984");
           couchData.loadDatabases().then(function (databases) {          
             var list = [];
@@ -156,7 +157,7 @@
           });
         } else {
           render('form', 'container');
-          $('#notification').append("no exist");
+          $('#notification').append("CouchDB not found here :(");
         }
       })
     });
@@ -185,7 +186,7 @@
   <script id="loadingTemplate" type="text/mustache">
     <div class="loading">
       <img alt="Ajax-loader" id="spinner" src="assets/ajax-loader.gif" /> 
-      <span class="instructions">Detecting couchapps on {{host}}...</span>
+      <span class="instructions">{{message}}</span>
     </div>
   </script>
 
