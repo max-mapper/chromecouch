@@ -1,0 +1,36 @@
+<!-- THANKS @SBISBEE FOR THESE CODEZ https://github.com/sbisbee/futonfinder -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+    div { float: left; margin-right: 10px; }
+    body {font-size:75%;color:#222;background:#fff;font-family:"Helvetica Neue", Arial, Helvetica, sans-serif;}
+    </style>
+  <body>
+    <div><img src="couch-48.png"/></div>
+
+    <p>
+      Found CouchDB v<span id="version"></span> running at <a href="" id="url" target="_blank"></a> (<a href="" id="futon" target="_blank">Futon</a>)
+    </p>
+
+    <script src="assets/jquery.min.js"></script>
+    <script src="assets/jquery.ba-bbq.min.js"></script>
+    <script>
+    $(function() {
+      var opts = $.deparam.querystring();
+
+      $('#version').text(opts.ver);
+
+      $('#url').attr('href', opts.url).text(opts.url);
+
+      $('#futon').attr('href', opts.url+'/_utils');
+
+      $('a').click(function() {
+        window.close();
+      });
+      
+      setTimeout(function() { window.close() }, 5000);
+    });
+    </script>
+  </body>
+</html>

@@ -1,11 +1,13 @@
 {
   "name": "CouchDB Replicator",
-  "version": "1.0.2",
-  "description": "Allows you to replicate and install couchapps super easily!",
+  "version": "1.0.3",
+  "description": "Allows you to find and replicate couchapps super easily!",
   "permissions": [
     "http://*/*",
     "https://*/*",
-    "tabs"
+    "tabs",
+    "notifications",
+    "unlimitedStorage"
   ],
   "icons": {
     "48" : "couch-48.png",

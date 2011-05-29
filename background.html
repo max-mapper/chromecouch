@@ -2,7 +2,12 @@
 <script>
   function request(options, callback) {
     var reqOpts = {
-      success: function(data){callback({data: data, ok: true})},
+      success: function(data) {
+        if (options.futonFinder && options.url.match(/:5984\/?$/) && data.couchdb) {
+          webkitNotifications.createHTMLNotification('notification.html?url='+options.url+'&ver='+data.version).show();
+        }
+        callback({data: data, ok: true}
+        )},
       error: function(error){callback({data: error, ok: false})},
       dataType: "json",
       contentType: "application/json",
