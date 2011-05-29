@@ -66,7 +66,13 @@
         db: source.split( '/' )[ 3 ],
         design: unescape( source ).split( '/' )[ 5 ]
       }
-      var replication = {"target":target, "source":parsed.host + "/" + parsed.db, "doc_ids":["_design/" + parsed.design]};
+      var replication = {
+        "target":target,
+        "source":parsed.host + "/" + parsed.db, 
+        "doc_ids":["_design/" + parsed.design],
+        "create_target":true,
+        "continuous": true
+      };
       var url = "http://" + target.split( "/" )[ 2 ] + "/_replicate";
 
       makeRequest({type: "POST", url: url, data: JSON.stringify(replication) }).then(function(response) {

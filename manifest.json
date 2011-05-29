@@ -1,7 +1,7 @@
 {
-  "name": "Couchappy",
-  "version": "1.0.0",
-  "description": "Allows you to install couchapps super easily!",
+  "name": "CouchDB Replicator",
+  "version": "1.0.2",
+  "description": "Allows you to replicate and install couchapps super easily!",
   "permissions": [
     "http://*/*",
     "https://*/*",
@@ -13,7 +13,7 @@
   },
   "browser_action": {
     "default_icon": "couch-19.png",
-    "default_title": "Couchappy",
+    "default_title": "CouchDB Replicator",
     "default_popup": "popup.html"
   },
   "background_page" : "background.html",
